@@ -24,5 +24,3 @@ Contributions are welcome! Submit issues or pull requests for improvements.
    ```bash
     g++ -std=c++17 -o game Main.cpp -pthread
     ./game
-
-    
