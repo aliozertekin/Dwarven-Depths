@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\Main.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Kaynak Dosyaları</Filter>
     </ClCompile>
   </ItemGroup>
