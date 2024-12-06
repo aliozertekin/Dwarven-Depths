@@ -9,184 +9,11 @@
 #include <sstream>
 #include <thread>
 
-#ifndef KBHIT_H
-#define KBHIT_H
-#endif
-
-#ifdef _WIN32
-#include <conio.h>
-#include <windows.h>
-#else
-#include <termios.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <cstdlib>
-#endif
-
-static int flagX, flagY;
-static int score;
-constexpr int MIN_WIDTH = 10;
-constexpr int MAX_WIDTH = 100;
-constexpr int MIN_HEIGHT = 15;
-constexpr int MAX_HEIGHT = 100;
-static clock_t current_ticks;
-static clock_t fps = 0;
-constexpr int HEALTH_COST = 5;
-constexpr int HEALTH_BOUGHT = 100;
-constexpr int FLAG_COST = 5;
-static int WIDTH;
-static int HEIGHT;
-static bool quitState;
-static bool flagState;
-
-// Function to check for keypress
-static bool cckbhit() {
-#ifdef _WIN32
-    return _kbhit();
-#else
-    struct termios oldt, newt;
-    int ch;
-    int oldf;
-
-    tcgetattr(STDIN_FILENO, &oldt);          // Save old terminal settings
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);        // Disable canonical mode and echo
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Apply new settings
-    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);  // Get old file status flags
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-    ch = getchar();
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore old settings
-    fcntl(STDIN_FILENO, F_SETFL, oldf);      // Restore old file status flags
-
-    if (ch != EOF) {
-        ungetc(ch, stdin); // Put the character back into the input stream
-        return true;
-    }
-    return false;
-#endif
-}
-
-// Function to get a character
-static char ccgetch() {
-#ifdef _WIN32
-    return _getch();
-#else
-    struct termios oldt, newt;
-    char ch;
-
-    tcgetattr(STDIN_FILENO, &oldt);          // Save old terminal settings
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);        // Disable canonical mode and echo
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Apply new settings
-
-    ch = getchar(); // Read a character
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore old settings
-    return ch;
-#endif
-}
+#include "Utils.h"
+#include "Game.h"
+using namespace Game;
 
 
-static void enableANSI() {
-#ifdef _WIN32
-    // Enable ANSI escape codes for Windows
-    std::system("clear"); // This sends an empty command to enable ANSI on Windows terminal
-#else
-    // On Unix/Linux, ANSI codes are supported by default
-#endif
-}
-
-static void clearScreen() {
-#ifdef _WIN32
-    // Use ANSI codes to clear screen if enabled
-    std::cout << "\033[2J\033[H";
-#else
-    // Use ANSI codes for Unix/Linux
-    std::cout << "\033[2J\033[H";
-#endif
-    std::cout.flush(); // Ensure the commands are processed immediately
-}
-
-
-static void setMapSize() {
-    WIDTH = MIN_WIDTH + (std::rand() % (MAX_WIDTH - MIN_WIDTH + 1));
-    HEIGHT = MIN_HEIGHT + (std::rand() % (MAX_HEIGHT - MIN_HEIGHT + 1));
-}
-
-static std::vector<int> getMapSize() {
-    return { HEIGHT,WIDTH };
-}
-
-enum TileWeight {
-    WEIGHT_STONE = 20,
-    WEIGHT_WALL = 30,
-    WEIGHT_GOLD = 10
-};
-enum Tile {
-    EMPTY = '.',
-    WALL = '#',
-    GOLD = 'G',
-    STONE = 'S',
-    DWARF = 'D',
-    CURSOR = '+',
-    BORDER = '@',
-    ENEMY = 'E',
-    FLAG = 'O'
-};
-
-enum class Color {
-    RESET = 0,
-    BLACK,
-    RED,
-    GREEN,
-    YELLOW,
-    BLUE,
-    MAGENTA,
-    CYAN,
-    WHITE
-};
-
-class Colorizer {
-public:
-    static std::string getColorCode(Color color) {
-        switch (color) {
-        case Color::RESET:   return "\033[0m";
-        case Color::BLACK:   return "\033[30m";
-        case Color::RED:     return "\033[31m";
-        case Color::GREEN:   return "\033[32m";
-        case Color::YELLOW:  return "\033[33m";
-        case Color::BLUE:    return "\033[34m";
-        case Color::MAGENTA: return "\033[35m";
-        case Color::CYAN:    return "\033[36m";
-        case Color::WHITE:   return "\033[37m";
-        default: return "\033[0m";
-        }
-    }
-
-    static std::string getTileColor(Tile tile) {
-        switch (tile) {
-        case DWARF:  return getColorCode(Color::MAGENTA);
-        case CURSOR: return getColorCode(Color::CYAN);
-        case WALL:   return getColorCode(Color::WHITE);
-        case GOLD:   return getColorCode(Color::YELLOW);
-        case STONE:  return getColorCode(Color::BLUE);
-        case BORDER: return getColorCode(Color::RED);
-        case ENEMY:  return getColorCode(Color::GREEN);
-        case EMPTY:  return getColorCode(Color::BLACK);
-        case FLAG: return getColorCode(Color::MAGENTA);
-        default:     return getColorCode(Color::RESET);
-        }
-    }
-};
-
-enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
 
 class Dwarf {
 public:
@@ -551,8 +378,8 @@ static void render(
 }
 
 static void handleInput(Dwarf& dwarf, Cursor& cursor, std::vector<std::vector<Tile>>& map, std::vector<Enemy>& enemies, std::map<std::string, int>& inventory) {
-    if (cckbhit()) {
-        char input = ccgetch();
+    if (Utils::cckbhit()) {
+        char input = Utils::ccgetch();
         switch (input) {
         case 'w': dwarf.move(0, -1, map); break;
         case 's': dwarf.move(0, 1, map); break;
@@ -579,7 +406,7 @@ int Cursor::floor = 1;
 int main() {
     clock_t delta_ticks;
 
-    enableANSI();
+    Utils::enableANSI();
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::vector<std::vector<Tile>> map(HEIGHT, std::vector<Tile>(EMPTY));
     initializeMap(map);
@@ -610,7 +437,7 @@ int main() {
 
         if (cursor.changeFloors) {
             std::cout << "\033[J";
-            clearScreen();
+            Utils::clearScreen();
             std::cout << "New Floor: " << Cursor::floor << std::endl;
             initializeMap(map);
             repositionDwarf(dwarf, map);

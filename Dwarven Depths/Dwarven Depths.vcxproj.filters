@@ -18,5 +18,19 @@
     <ClCompile Include="Main.cpp">
       <Filter>Kaynak Dosyaları</Filter>
     </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Utils.h">
+      <Filter>Kaynak Dosyalar</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Kaynak Dosyalar</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
