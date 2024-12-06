@@ -24,12 +24,30 @@
     <ClCompile Include="Game.cpp">
       <Filter>Kaynak Dosyaları</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="Dwarf.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
       <Filter>Kaynak Dosyalar</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
+      <Filter>Kaynak Dosyalar</Filter>
+    </ClInclude>
+    <ClInclude Include="Dwarf.h">
+      <Filter>Kaynak Dosyalar</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Kaynak Dosyalar</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
       <Filter>Kaynak Dosyalar</Filter>
     </ClInclude>
   </ItemGroup>

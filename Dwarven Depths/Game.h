@@ -3,11 +3,11 @@
 #include <iostream>
 #include <vector>
 #include <ctime> // For clock_t
+#include <map>
 
 namespace Game {
     static constexpr int MIN_WIDTH = 10;
     static constexpr int MAX_WIDTH = 100;
-
     static constexpr int MIN_HEIGHT = 15;
     static constexpr int MAX_HEIGHT = 100;
     static constexpr int HEALTH_COST = 5;
@@ -21,7 +21,8 @@ namespace Game {
     extern clock_t current_ticks;
     extern int WIDTH, HEIGHT;
     extern bool quitState, flagState;
-
+    extern std::vector<std::pair<int, int>> emptyTiles;
+    extern std::map<std::string, int> inventory;
     enum TileWeight {
         WEIGHT_STONE = 20,
         WEIGHT_WALL = 30,
@@ -68,4 +69,9 @@ namespace Game {
     // Function declarations
     void setMapSize();
     std::vector<int> getMapSize();
+    void initializeEmptyTiles(const std::vector<std::vector<Tile>>& map);
+    std::pair<int, int> getRandomEmptyTile();
+    bool tileWeight(int weight);
+    void showFlag(std::map<std::string, int>& inventory);
+
 };

@@ -10,6 +10,8 @@ namespace Game {
     int HEIGHT = MIN_HEIGHT;
     bool quitState = false;
     bool flagState = false;
+    std::vector<std::pair<int, int>> emptyTiles;
+    std::map<std::string, int> inventory;
 
     // Implement the Colorizer methods
     std::string Colorizer::getColorCode(Color color) {
@@ -52,4 +54,36 @@ namespace Game {
     std::vector<int> getMapSize() {
         return { WIDTH, HEIGHT };
     }
+
+    void initializeEmptyTiles(const std::vector<std::vector<Tile>>& map)
+    {
+        emptyTiles.clear();
+        for (int y = 1; y < map.size() - 1; ++y) {
+            for (int x = 1; x < map[0].size() - 1; ++x) {
+                if (map[y][x] == EMPTY) emptyTiles.push_back({ x, y });
+            }
+        }
+    }
+    std::pair<int, int> getRandomEmptyTile()
+    {
+        int index = std::rand() % emptyTiles.size();
+        auto& tile = emptyTiles[index];
+        emptyTiles.erase(emptyTiles.begin() + index);
+        return tile;
+    }
+    bool tileWeight(int weight)
+    {
+        if (std::rand() % 100 < weight) return true;
+        else                            return false;
+    }
+
+    void showFlag(std::map<std::string, int>& inventory)
+    {
+        if (inventory["Stone"] >= FLAG_COST && flagState == false) {
+            inventory["Stone"] -= FLAG_COST;
+            flagState = true;
+        }
+    }
+
+
 }
