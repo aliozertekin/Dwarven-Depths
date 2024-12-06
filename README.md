@@ -10,7 +10,7 @@ A lightweight console-based dungeon crawler built in C++.
 ## How to Play
 1. **Movement:** Use arrow keys or WASD to move.
 2. **Interaction:** Collect resources and avoid enemies.
-3. **Floor Change:** Move to stairs to ascend or descend floors.
+3. **Floor Change:** Move to stairs to ascend floors.
 
 
 ## Contributions
