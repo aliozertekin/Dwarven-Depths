@@ -30,7 +30,7 @@ Contributions are welcome! Submit issues or pull requests for improvements.
 ### Prerequisites
 Make sure you have the following installed:
 - **CMake** (https://cmake.org/)
-- A **C++20-compatible compiler**
+- A **C++17-compatible compiler**
 
 ---
 
