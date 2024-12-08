@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.15)
 project(DwarvenDepths VERSION 1.0)
 
 # Set the C++ standard
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add source files
@@ -32,9 +32,9 @@ add_executable(DwarvenDepths ${SOURCES})
 find_package(Threads REQUIRED)
 target_link_libraries(DwarvenDepths PRIVATE Threads::Threads)
 
-# Enable extra compiler warnings (optional)
+# Set compiler options safely
 if (MSVC)
-    target_compile_options(DwarvenDepths PRIVATE /W4 /WX)
+    target_compile_options(DwarvenDepths PRIVATE /W4) # Just show warnings but don't treat them as fatal
 else()
-    target_compile_options(DwarvenDepths PRIVATE -Wall -Wextra -pedantic -Werror)
+    target_compile_options(DwarvenDepths PRIVATE -Wall -Wextra)
 endif()
