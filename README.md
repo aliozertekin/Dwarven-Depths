@@ -45,7 +45,7 @@ cmake ..
 
 ### On linux/mac, use:
 ```bash
-   make
+make
 ```
 ### On Windows, use:
 ```bash
