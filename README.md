@@ -36,20 +36,27 @@ Make sure you have the following installed:
 
 ### Clone the Repository
 ```bash
-   git clone https://github.com/aliozertekin/Dwarven-Depths.git
-   cd DwarvenDepths
-   mkdir build
-   cd build
-   cmake ..
+git clone https://github.com/aliozertekin/Dwarven-Depths.git
+cd Dwarven-Depths
+mkdir build
+cd build
+cmake ..
+```
+
 ### On linux/mac, use:
+```bash
    make
-
+```
 ### On Windows, use:
+```bash
 cmake --build . --config Release
-
+```
 Run the Game:
 Linux/Mac:
+```bash
 ./DwarvenDepths
-
+```
 Windows:
+```bash
 DwarvenDepths.exe
+```
