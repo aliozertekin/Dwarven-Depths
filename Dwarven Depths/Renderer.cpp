@@ -170,7 +170,7 @@ void Renderer::initializeMap(std::vector<std::vector<Tile>>& map)
     }
     initializeEmptyTiles(map);
     // Spawn enemies
-    for (; Enemy::enemies.size() < std::floor((std::min)((std::min)(Dwarf::Cursor::floor / 2, 20), (WIDTH + HEIGHT) / 4));) {
+    for (; Enemy::enemies.size() < (std::min)((std::min)(Dwarf::Cursor::floor / 2, 20), (WIDTH + HEIGHT) / 4);) {
         std::pair<int, int> enemyPosition = getRandomEmptyTile();
         map[enemyPosition.second][enemyPosition.first] = ENEMY;
         Enemy::addEnemy(enemyPosition.first, enemyPosition.second, 1);
