@@ -94,7 +94,7 @@ namespace Game {
         }
     }
 
-    std::vector<int> Game::getTime() {
+    std::vector<int> getTime() {
         int timeInSeconds = current_ticks / 1000;  // Assuming `current_ticks` is in milliseconds
         int timeInMinutes = timeInSeconds / 60;   // Derive minutes
         int secondsLeft = timeInSeconds % 60;     // Remaining seconds after minutes
@@ -103,11 +103,11 @@ namespace Game {
         return { timeInMinutes, secondsLeft };
     }
 
-    void Game::startTimer() {
+    void startTimer() {
         start_time = std::chrono::steady_clock::now();
     }
 
-    void Game::updateTicks() {
+    void updateTicks() {
         auto now = std::chrono::steady_clock::now();
         current_ticks = static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(now - start_time).count());
     }
