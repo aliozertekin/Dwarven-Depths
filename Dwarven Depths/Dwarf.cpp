@@ -123,7 +123,8 @@ void Dwarf::Cursor::mine(std::vector<std::vector<Tile>>& map, std::map<std::stri
         map[y][x] = EMPTY;
     }
     else if (map[y][x] == FLAG) {
-        floor = floor++;
+        
+        floor++;
         score += 1000;
         changeFloors = true;
     }
