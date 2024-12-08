@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 
 #ifdef _WIN32
 #include <conio.h>
@@ -17,4 +18,7 @@ public:
 	static bool cckbhit();
 	static void clearScreen();
 	static void enableANSI();
+	static void hideCursorCleanScreen();
+	static constexpr int my_min(int a, int b);
+	static constexpr int my_max(int a, int b);
 };

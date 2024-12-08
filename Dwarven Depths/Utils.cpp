@@ -73,5 +73,25 @@ void Utils::enableANSI()
 #endif
 }
 
+void Utils::hideCursorCleanScreen()
+{
+#ifdef _WIN32
+    std::cout << "\033[2J\033[?25l";
+#else
+    std::cout << "\033[2J\033[?25l";
+#endif
+}
+
+//constexpr version of std::min max
+constexpr int Utils::my_min(int a, int b)
+{
+    return (a < b) ? a : b;
+}
+
+constexpr int Utils::my_max(int a, int b)
+{
+    return (a > b) ? a : b;
+}
+
 
 

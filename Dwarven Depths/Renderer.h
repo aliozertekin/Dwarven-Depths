@@ -22,4 +22,9 @@ public:
         const std::vector<Enemy>& enemies,
         const std::map<std::string, int>& inventory);
 	static void initializeMap(std::vector<std::vector<Tile>>& map);
+private:
+
+    static constexpr int CONSOLE_WIDTH = 64;  // Adjust based on your terminal size
+    static constexpr int CONSOLE_HEIGHT = 24; // Exclude space for UI lines
+
 };

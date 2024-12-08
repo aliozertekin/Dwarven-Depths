@@ -4,7 +4,6 @@ namespace Game {
     // Define global variables here
     int flagX = 0, flagY = 0;
     int score = 0;
-    clock_t fps = 0;
     clock_t current_ticks = 0;
     int WIDTH = MIN_WIDTH;
     int HEIGHT = MIN_HEIGHT;
@@ -12,6 +11,14 @@ namespace Game {
     bool flagState = false;
     std::vector<std::pair<int, int>> emptyTiles;
     std::map<std::string, int> inventory;
+    std::chrono::steady_clock::time_point start_time;
+
+
+    std::mutex mapMutex;
+    std::mutex enemiesMutex;
+    std::mutex dwarfMutex;
+    std::mutex cursorMutex;
+    std::mutex inventoryMutex;
 
     // Implement the Colorizer methods
     std::string Colorizer::getColorCode(Color color) {
@@ -64,6 +71,7 @@ namespace Game {
             }
         }
     }
+
     std::pair<int, int> getRandomEmptyTile()
     {
         int index = std::rand() % emptyTiles.size();
@@ -71,6 +79,7 @@ namespace Game {
         emptyTiles.erase(emptyTiles.begin() + index);
         return tile;
     }
+
     bool tileWeight(int weight)
     {
         if (std::rand() % 100 < weight) return true;
@@ -85,5 +94,21 @@ namespace Game {
         }
     }
 
+    std::vector<int> Game::getTime() {
+        int timeInSeconds = current_ticks / 1000;  // Assuming `current_ticks` is in milliseconds
+        int timeInMinutes = timeInSeconds / 60;   // Derive minutes
+        int secondsLeft = timeInSeconds % 60;     // Remaining seconds after minutes
 
+        // Return minutes and seconds as a vector
+        return { timeInMinutes, secondsLeft };
+    }
+
+    void Game::startTimer() {
+        start_time = std::chrono::steady_clock::now();
+    }
+
+    void Game::updateTicks() {
+        auto now = std::chrono::steady_clock::now();
+        current_ticks = static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(now - start_time).count());
+    }
 }

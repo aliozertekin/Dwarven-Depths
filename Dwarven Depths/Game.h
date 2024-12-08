@@ -1,5 +1,5 @@
 #pragma once
-
+#include <mutex>
 #include <iostream>
 #include <vector>
 #include <ctime> // For clock_t
@@ -11,18 +11,23 @@ namespace Game {
     static constexpr int MIN_HEIGHT = 15;
     static constexpr int MAX_HEIGHT = 100;
     static constexpr int HEALTH_COST = 5;
-    static constexpr int HEALTH_BOUGHT = 100;
+    static constexpr int HEALTH_BOUGHT = 10;
     static constexpr int FLAG_COST = 5;
-
+    // Mutex for locking 
+    extern std::mutex mapMutex;
+    extern std::mutex enemiesMutex;
+    extern std::mutex dwarfMutex;
+    extern std::mutex cursorMutex;
+    extern std::mutex inventoryMutex;
     // Declare global variables with extern
+    extern int WIDTH, HEIGHT;
     extern int flagX, flagY;
     extern int score;
-    extern clock_t fps;
     extern clock_t current_ticks;
-    extern int WIDTH, HEIGHT;
     extern bool quitState, flagState;
     extern std::vector<std::pair<int, int>> emptyTiles;
     extern std::map<std::string, int> inventory;
+
     enum TileWeight {
         WEIGHT_STONE = 20,
         WEIGHT_WALL = 30,
@@ -73,5 +78,8 @@ namespace Game {
     std::pair<int, int> getRandomEmptyTile();
     bool tileWeight(int weight);
     void showFlag(std::map<std::string, int>& inventory);
+    std::vector<int> getTime();
+    void updateTicks();
+    void startTimer();
 
 };

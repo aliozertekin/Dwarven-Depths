@@ -2,6 +2,7 @@
 
 
 
+int Dwarf::Cursor::floor = 1;
 
 void Dwarf::repositionDwarf(std::vector<std::vector<Tile>>& map)
 {
@@ -14,18 +15,22 @@ void Dwarf::repositionDwarf(std::vector<std::vector<Tile>>& map)
 }
 void Dwarf::move(int dx, int dy, std::vector<std::vector<Tile>>& map)
 {
-     int newX = x + dx;
-     int newY = y + dy;
+    std::lock_guard<std::mutex> lockMap(mapMutex);
+    std::lock_guard<std::mutex> lockDwarf(dwarfMutex);
 
-     if (newX >= 0 && newX < WIDTH && newY >= 0 && newY < HEIGHT && map[newY][newX] == EMPTY) {
-         x = newX;
-         y = newY;
-     }
 
-     if (dx == 1) direction = RIGHT;
-     else if (dx == -1) direction = LEFT;
-     else if (dy == 1) direction = DOWN;
-     else if (dy == -1) direction = UP;
+    int newX = x + dx;
+    int newY = y + dy;
+
+    if (newX >= 0 && newX < WIDTH && newY >= 0 && newY < HEIGHT && map[newY][newX] == EMPTY) {
+        x = newX;
+        y = newY;
+    }
+
+    if (dx == 1) direction = RIGHT;
+    else if (dx == -1) direction = LEFT;
+    else if (dy == 1) direction = DOWN;
+    else if (dy == -1) direction = UP;
 }
 
 void Dwarf::takeDamage(int damage)
@@ -78,6 +83,14 @@ void Dwarf::attack(std::vector<std::vector<Tile>>& map, std::vector<Enemy>& enem
             }
             return; // Exit loop after processing ( this was break before. )
         }
+    }
+}
+
+void Dwarf::buyHp(std::map<std::string, int>& inventory, Dwarf& dwarf)
+{
+    if (inventory["Gold"] >= HEALTH_COST) {
+        inventory["Gold"] -= HEALTH_COST;
+        dwarf.health += HEALTH_BOUGHT;
     }
 }
 

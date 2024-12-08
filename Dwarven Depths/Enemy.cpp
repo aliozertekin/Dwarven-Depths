@@ -1,5 +1,8 @@
 #include "Enemy.h"
 
+
+std::vector<Enemy> Enemy::enemies;
+
 void Enemy::addEnemy(int x, int y, int hp)
 {
     enemies.emplace_back(x, y, hp);
@@ -45,8 +48,8 @@ void Enemy::moveRandomly(std::vector<std::vector<Tile>>& map, int frame)
         y = newY;
 
         map[y][x] = ENEMY;
-    }
 
+    }
 }
 
 void Enemy::moveEnemies(std::vector<Enemy>& enemies, std::vector<std::vector<Tile>>& map, int frame)

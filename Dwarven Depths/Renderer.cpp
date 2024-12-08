@@ -2,29 +2,52 @@
 
 
 
-void Renderer::handleInput(Dwarf& dwarf, Dwarf::Cursor& cursor, std::vector<std::vector<Tile>>& map, std::vector<Enemy>& enemies, std::map<std::string, int>& inventory)
-{
+void Renderer::handleInput(Dwarf& dwarf, Dwarf::Cursor& cursor, std::vector<std::vector<Tile>>& map, std::vector<Enemy>& enemies, std::map<std::string, int>& inventory) {
     if (Utils::cckbhit()) {
         char input = Utils::ccgetch();
         switch (input) {
-        case 'w': dwarf.move(0, -1, map); break;
-        case 's': dwarf.move(0, 1, map); break;
-        case 'a': dwarf.move(-1, 0, map); break;
-        case 'd': dwarf.move(1, 0, map); break;
-        case 'm': cursor.mine(map, inventory); break;
-        case 'f': dwarf.attack(map, enemies); break;
-        case 'e': showFlag(inventory); break;
-        case 'q': quitState = true; break;
-        case 'b':
-            if (inventory["Gold"] >= HEALTH_COST) {
-                inventory["Gold"] -= HEALTH_COST;
-                dwarf.health += HEALTH_BOUGHT;
-            }
+        case 'w':
+            dwarf.move(0, -1, map);
             break;
-        default: break;
+        case 's':
+            dwarf.move(0, 1, map);
+            break;
+        case 'a':
+            dwarf.move(-1, 0, map);
+            break;
+        case 'd':
+            dwarf.move(1, 0, map);
+            break;
+        case 'm': {
+            cursor.mine(map, inventory);
+            break;
+        }
+        case 'f': {
+            dwarf.attack(map, enemies);
+            break;
+        }
+        case 'e': {
+            showFlag(inventory);
+            break;
+        }
+        case 'q': {
+            Game::quitState = true;
+            std::cout << "Quit pressed. Setting quitState to true.\n";
+            std::cout << quitState;
+            break;
+        }
+        case 'b': {
+            dwarf.buyHp(inventory, dwarf);
+            break;
+        }
+        default:
+            break;
         }
     }
 }
+
+
+
 
 std::string Renderer::renderData(const std::map<std::string, int>& inventory)
 {
@@ -41,9 +64,9 @@ std::string Renderer::renderData(const std::map<std::string, int>& inventory)
 }
 std::string Renderer::renderData(int y, const Dwarf& dwarf, const Dwarf::Cursor& cursor, int viewportStartY)
 {
+    
     std::string data;
-    int timeInSecond = ((current_ticks / 1000));
-    int timeInMinute = (timeInSecond / 60);
+    auto time = getTime();
     std::vector<std::string> instructions = {
     Colorizer::getColorCode(Color::WHITE) + "| Manual: 'WASD' to move.",
     Colorizer::getColorCode(Color::WHITE) + "| 'F' for attacking.",
@@ -52,7 +75,7 @@ std::string Renderer::renderData(int y, const Dwarf& dwarf, const Dwarf::Cursor&
     Colorizer::getColorCode(Color::WHITE) + "| 'Q' to exit the game.",
     Colorizer::getColorCode(Color::YELLOW) + "| Stats:",
     Colorizer::getColorCode(Color::MAGENTA) + "| Score: " + std::to_string(score),
-    Colorizer::getColorCode(Color::MAGENTA) + "| Time: [" + std::to_string(timeInMinute) + ":" + std::to_string(timeInSecond % 60) + "]",
+    Colorizer::getColorCode(Color::MAGENTA) + "| Time: [" + std::to_string(time[0]) + ":" + std::to_string(time[1]) + "]",
     Colorizer::getColorCode(Color::RED) + "| Position: (" + std::to_string(dwarf.x) + ", " + std::to_string(dwarf.y) + ")",
     Colorizer::getColorCode(Color::RED) + "| Cursor: (" + std::to_string(cursor.x) + ", " + std::to_string(cursor.y) + ")",
     Colorizer::getColorCode(Color::RED) + "| Health: " + std::to_string(dwarf.health),
@@ -72,19 +95,17 @@ std::string Renderer::renderData(int y, const Dwarf& dwarf, const Dwarf::Cursor&
 }
 
 void Renderer::render(
+
     const std::vector<std::vector<Tile>>& map,
     const Dwarf& dwarf,
     const Dwarf::Cursor& cursor,
     const std::vector<Enemy>& enemies,
     const std::map<std::string, int>& inventory)
 {
-    const int CONSOLE_WIDTH = 64;  // Adjust based on your terminal size
-    const int CONSOLE_HEIGHT = 24; // Exclude space for UI lines
 
-    const int VIEW_WIDTH = (std::min)(CONSOLE_WIDTH / 2, WIDTH);
-    const int VIEW_HEIGHT = (std::min)(CONSOLE_HEIGHT - 8, HEIGHT); // Reserve space for UI
+    int VIEW_WIDTH = (std::min)(CONSOLE_WIDTH / 2, WIDTH);
+    int VIEW_HEIGHT = (std::min)(CONSOLE_HEIGHT - 8, HEIGHT); // Reserve space for UI 
 
-    // Determine viewport bounds
     int viewportStartX = (std::max)(0, (std::min)(dwarf.x - VIEW_WIDTH / 2, WIDTH - VIEW_WIDTH));
     int viewportStartY = (std::max)(0, (std::min)(dwarf.y - VIEW_HEIGHT / 2, HEIGHT - VIEW_HEIGHT));
 
@@ -120,7 +141,6 @@ void Renderer::render(
 
     // Reset color to default
     buffer << Colorizer::getColorCode(Color::RESET);
-    buffer << "FPS:(MAX = 1000) = " + std::to_string(fps);
     // Flush the buffer to the console in one go
     std::cout << buffer.str();
 }
