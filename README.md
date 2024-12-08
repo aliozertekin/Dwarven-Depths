@@ -51,12 +51,12 @@ make
 ```bash
 cmake --build . --config Release
 ```
-###Run the Game:
-###Linux/Mac:
+### Run the Game:
+### Linux/Mac:
 ```bash
 ./DwarvenDepths
 ```
-###Windows:
+### Windows:
 ```bash
 DwarvenDepths.exe
 ```
