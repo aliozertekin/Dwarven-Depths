@@ -12,6 +12,7 @@ A lightweight console-based dungeon crawler built in C++.
 2. **Interaction:** Collect resources and avoid enemies.
 3. **Floor Change:** Move to stairs to ascend floors.
 
+![example](image.png)
 
 ## Contributions
 Contributions are welcome! Submit issues or pull requests for improvements.
